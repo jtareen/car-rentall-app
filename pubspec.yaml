@@ -20,4 +20,5 @@ flutter:
   assets:
     - 'assets/'
     - 'assets/images/'
+    - 'assets/icons/'
   uses-material-design: true
