@@ -1,3 +1,4 @@
+import 'package:car_renr_app/screens/otp_verification_screen.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:car_renr_app/utils/styles.dart';
@@ -49,7 +50,9 @@ class SignUpPage extends StatelessWidget {
                   const SizedBox(height: 20,),
                   PasswordField(),
                   const SizedBox(height: 20,),
-                  SignInUpPageButton(label: 'Register', onPressed: (){}),
+                  SignInUpPageButton(label: 'Register', onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const OtpVerificationScreen() ));
+                  }),
                   const SizedBox(height: 20,),
                   const LoginDivider(label: 'or register with'),
                   const SizedBox(height: 20,),

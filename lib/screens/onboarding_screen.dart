@@ -1,6 +1,6 @@
 import 'package:car_renr_app/screens/signin_screen.dart';
 import 'package:car_renr_app/utils/styles.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/pagination_indicator.dart';
+import 'package:car_renr_app/widgets/pagination_indicator.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingScreen extends StatefulWidget {

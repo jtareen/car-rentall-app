@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 const Color primary = Color.fromRGBO(19, 22, 52, 1.0);
+const Color primary800 = Color(0xFF1B588C);
+const Color primary700 = Color(0xff2b7bae);
+const Color primary600 = Color(0xff3ea2d0);
+const Color primary400 = Color(0xff7fe2f7);
 
 final ButtonStyle primaryTextButtonStyle = TextButton.styleFrom(
     backgroundColor: primary,
