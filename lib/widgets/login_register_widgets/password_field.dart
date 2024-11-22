@@ -25,8 +25,8 @@ class _PasswordFieldState extends State<PasswordField> {
         obscureText: _obscureText,
         iconButton: IconButton(
             onPressed: _togglePasswordVisibility,
-            icon: Icon(
-              _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+            icon: Image.asset(
+              _obscureText ? 'assets/icons/visibility_icon.png' : 'assets/icons/visibility_off_icon.png',
               color: Colors.grey,
             )
         )
