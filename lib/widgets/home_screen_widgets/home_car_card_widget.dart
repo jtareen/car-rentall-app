@@ -1,4 +1,5 @@
 import 'package:car_renr_app/models/car_class.dart';
+import 'package:car_renr_app/utils/styles.dart';
 import 'package:flutter/material.dart';
 
 class HomeCarCardWidget extends StatelessWidget {
@@ -11,71 +12,42 @@ class HomeCarCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          children: [
-            // Car image section
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.asset(
-                car.imageUrl,
-                height: 100,
-                width: 100,
-                fit: BoxFit.cover,
-              ),
+    return Padding(
+      padding: const EdgeInsets.only(right: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(25),
+            child: Image.asset(car.imageUrl, height: 150, width: 250, fit: BoxFit.fitWidth ,),
+          ),
+          SizedBox(height: 10,),
+          Text('${car.carCompany} ${car.carName} - ${car.carModel}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+          SizedBox(height: 10,),
+          Row(
+            children: [
+              Image.asset('assets/icons/star_icon.png', height: 27,),
+              SizedBox(width: 5,),
+              Text('${car.rating}', style: TextStyle(color: primary,fontSize: 16, fontWeight: FontWeight.bold),),
+              SizedBox(width: 5,),
+              Text('(${car.reviewCount} Reviews)', style: TextStyle(color: Colors.grey),)
+            ],
+          ),
+          SizedBox(height: 10,),
+          RichText(
+            text: TextSpan(
+              style: TextStyle(color: primary700, fontSize: 20),
+              children: [
+                TextSpan(
+                  text: '\$${car.pricePerDay}', style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: ' / Day', style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            // Car details section
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Car name and rating section
-                  Text(
-                    car.carName,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.orange,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        '${car.rating} (${car.reviewCount} reviews)',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  // Price per day section
-                  Text(
-                    '£${car.pricePerDay.toStringAsFixed(2)} / day',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

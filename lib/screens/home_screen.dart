@@ -13,6 +13,7 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HomeScreenHeader(),
             HomeHeroWidget(),
@@ -26,20 +27,13 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.horizontal,
-            //   child: Row(
-            //       children: carList.map((car) => HomeCarCardWidget(car: car)).toList()
-            //   ),
-            // )
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                children: [
-                  HomeCarCardWidget(car: carList[0]),
-                  HomeCarCardWidget(car: carList[1]),
-                  HomeCarCardWidget(car: carList[2]),
-                ],
+              padding: const EdgeInsets.only(left: 30, top: 10, bottom: 30),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                    children: carList.map((car) => HomeCarCardWidget(car: car)).toList()
+                ),
               ),
             )
           ],
