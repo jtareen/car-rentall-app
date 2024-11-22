@@ -20,7 +20,7 @@ class Car {
 
 List<Car> carList = [
   Car(
-    imageUrl: 'assets/images/onboarding_01.jpeg',
+    imageUrl: 'assets/images/cars/car_01.jpeg',
     carName: 'Model 3',
     carCompany: 'Tesla',
     carModel: '2021',
@@ -29,7 +29,7 @@ List<Car> carList = [
     pricePerDay: 15.00,
   ),
   Car(
-    imageUrl: 'assets/images/onboarding_01.jpeg',
+    imageUrl: 'assets/images/cars/car_02.jpeg',
     carName: '5 Series',
     carCompany: 'BMW',
     carModel: '2021',
@@ -38,7 +38,7 @@ List<Car> carList = [
     pricePerDay: 20.00,
   ),
   Car(
-    imageUrl: 'assets/images/onboarding_01.jpeg',
+    imageUrl: 'assets/images/cars/car_03.jpeg',
     carName: 'E-Class',
     carCompany: 'Mercedes-Benz',
     carModel: '2020',
@@ -47,7 +47,7 @@ List<Car> carList = [
     pricePerDay: 25.00,
   ),
   Car(
-    imageUrl: 'assets/images/onboarding_01.jpeg',
+    imageUrl: 'assets/images/cars/car_04.jpeg',
     carName: 'A6',
     carCompany: 'Audi',
     carModel: '2022',
@@ -56,7 +56,7 @@ List<Car> carList = [
     pricePerDay: 22.50,
   ),
   Car(
-    imageUrl: 'assets/images/onboarding_01.jpeg',
+    imageUrl: 'assets/images/cars/car_05.jpeg',
     carName: 'Mustang',
     carCompany: 'Ford',
     carModel: '2021',
