@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -20,5 +19,6 @@ flutter:
   assets:
     - 'assets/'
     - 'assets/images/'
+    - 'assets/images/cars/'
     - 'assets/icons/'
   uses-material-design: true
