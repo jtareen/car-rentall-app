@@ -27,10 +27,10 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
               padding: const EdgeInsets.only(left: 30, top: 10, bottom: 30),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
                 child: Row(
                     children: carList.map((car) => HomeCarCardWidget(car: car)).toList()
                 ),

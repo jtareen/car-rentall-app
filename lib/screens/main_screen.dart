@@ -30,16 +30,20 @@ class _MainScreenState extends State<MainScreen> {
         children: _pages,
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: primary600,
-        child: const Icon(Icons.add, size: 30, color: Colors.white),
+      floatingActionButton: Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [primary800, primary700, primary600]),
+          borderRadius: BorderRadius.circular(25)
+        ),
+        child: Icon(Icons.add, size: 30, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         shadowColor: Colors.black,
+        padding: EdgeInsets.all(0),
         elevation: 30,
         shape: const CircularNotchedRectangle(),
         notchMargin: 8.0,
@@ -78,10 +82,10 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildNavItem({required String icon, required VoidCallback onTap}) {
-    return IconButton(
+    return Expanded(child: IconButton(
       icon: Image.asset(icon),
       onPressed: onTap,
-    );
+    ));
   }
 
   void _updateIndex(int index) {
