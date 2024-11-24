@@ -1,4 +1,4 @@
-import 'package:car_renr_app/screens/signin_screen.dart';
+import 'package:car_renr_app/screens/login/signin_screen.dart';
 import 'package:car_renr_app/utils/styles.dart';
 import 'package:car_renr_app/widgets/pagination_indicator.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +15,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentIndex = 0;
 
   void _getStarted () {
-    Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SignInPage())
-    );
+    Navigator.pushReplacementNamed(context, '/signin');
   }
 
   void _nextPage() {
@@ -81,16 +78,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Expanded(
                   child: PaginationIndicator(currentIndex: _currentIndex, itemCount: 3, activeColor: primary,)),
 
-                TextButton(
+                _currentIndex == 2 ? const SizedBox.shrink() : TextButton(
                   onPressed: _getStarted,
                   style: secondaryTextButtonStyle,
                   child: const Text('Skip'),
                 ),
                 const SizedBox(width: 5,),
-                TextButton(
-                    onPressed: _nextPage,
-                    style: primaryTextButtonStyle,
-                      child: const Text('Next'),
+                GestureDetector(
+                  onTap: _nextPage,
+                  child: AnimatedContainer(
+                    width: _currentIndex == 2 ? 120 : 80,
+                    height: 45,
+                    duration: Duration(milliseconds: 200),
+                    // padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+                    decoration: BoxDecoration(
+                      color: primary,
+                      borderRadius: BorderRadius.circular(15)
+                    ),
+                    child: Center(child: Text(_currentIndex == 2 ? 'Get Started' : 'Next', style: TextStyle(color: Colors.white),)),
+                  ),
                 )
               ],
             ),

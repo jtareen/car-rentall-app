@@ -1,7 +1,7 @@
-import 'package:car_renr_app/screens/chats_screen.dart';
-import 'package:car_renr_app/screens/home_screen.dart';
-import 'package:car_renr_app/screens/profile_screen.dart';
-import 'package:car_renr_app/screens/trips_screen.dart';
+import 'package:car_renr_app/screens/main/chats_screen.dart';
+import 'package:car_renr_app/screens/main/home_screen.dart';
+import 'package:car_renr_app/screens/main/profile_screen.dart';
+import 'package:car_renr_app/screens/main/trips_screen.dart';
 import 'package:car_renr_app/utils/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0; // Track the selected tab
 
   final List<Widget> _pages = [
-    HomeScreen(),
+    const HomeScreen(),
     TripsScreen(),
     ChatsScreen(),
     ProfileScreen(),
@@ -31,19 +31,19 @@ class _MainScreenState extends State<MainScreen> {
       ),
 
       floatingActionButton: Container(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [primary800, primary700, primary600]),
+          gradient: const LinearGradient(colors: [primary800, primary700, primary600]),
           borderRadius: BorderRadius.circular(25)
         ),
-        child: Icon(Icons.add, size: 30, color: Colors.white),
+        child: const Icon(Icons.add, size: 30, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         shadowColor: Colors.black,
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         elevation: 30,
         shape: const CircularNotchedRectangle(),
         notchMargin: 8.0,

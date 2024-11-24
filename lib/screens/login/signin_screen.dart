@@ -1,4 +1,3 @@
-import 'package:car_renr_app/screens/signup_screen.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:car_renr_app/utils/styles.dart';
@@ -10,26 +9,23 @@ import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_textfi
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
+  void loginAttempt (context) {
+    Navigator.pushReplacementNamed(context, '/main');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back_ios_new, color: primary,)
-        ),
-      ),
+
       body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 50,),
                   const Text(
-                    'Welcome to, Pikbil',
+                    'Welcome to, Pikbil 👌',
                     style: TextStyle(
                         color: primary,
                         fontSize: 24,
@@ -46,16 +42,16 @@ class SignInPage extends StatelessWidget {
                   const SizedBox(height: 20,),
                   SignInUpPageTextField(label: 'Email Address', hint: 'Your email address', inputType: TextInputType.emailAddress,),
                   const SizedBox(height: 20,),
-                  PasswordField(),
+                  const PasswordField(),
                   const SizedBox(height: 20,),
-                  SignInUpPageButton(label: 'Login', onPressed: (){}),
+                  SignInUpPageButton(label: 'Login', onPressed: () => loginAttempt(context)),
                   const SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
                           onTap: () {
-                            // on tap functionality
+                            Navigator.pushNamed(context, '/forgotpassword');
                           },
                           child: const Text('Forgot password?', style: TextStyle(color: Colors.grey),)
                       )
@@ -66,30 +62,33 @@ class SignInPage extends StatelessWidget {
                   const SizedBox(height: 20,),
                   const SocialButtonsWidget(),
                   const SizedBox(height: 20,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Didn't have a pikbil account? ",
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 16,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
-                        },
-                        child: const Text(
-                          "Register",
+                  Center(
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        Text(
+                          "Didn't have a pikbil account? ",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: primary, // Adjust color as needed
-                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[700],
                             fontSize: 16,
                           ),
                         ),
-                      ),
-                    ],
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/signup');
+                          },
+                          child: const Text(
+                            "Register",
+                            style: TextStyle(
+                              color: primary, // Adjust color as needed
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   )
                 ]
             ),

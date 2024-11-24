@@ -24,7 +24,7 @@ class _homeHeroWidgetState extends State<HomeHeroWidget> {
     return Column(
       children: [
         SizedBox(
-          height: 280,
+          height: MediaQuery.of(context).size.width > 405 ? 280 : 320,
           child: PageView(
           controller: _pageController,
           onPageChanged: (index) {
