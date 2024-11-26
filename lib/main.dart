@@ -1,3 +1,4 @@
+import 'package:car_renr_app/firebase_options.dart';
 import 'package:car_renr_app/screens/login/forgot_password_screen.dart';
 import 'package:car_renr_app/screens/main/main_screen.dart';
 import 'package:car_renr_app/screens/onboarding/onboarding_screen.dart';
@@ -5,10 +6,18 @@ import 'package:car_renr_app/screens/login/otp_verification_screen.dart';
 import 'package:car_renr_app/screens/login/recover_account_screen.dart';
 import 'package:car_renr_app/screens/login/signin_screen.dart';
 import 'package:car_renr_app/screens/login/signup_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    runApp(const MainApp());
+  } on Exception catch (e) {
+    print('an error occurred');
+    print(e.runtimeType);
+  }
 }
 
 class MainApp extends StatelessWidget {

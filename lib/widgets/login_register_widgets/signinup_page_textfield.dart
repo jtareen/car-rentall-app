@@ -5,10 +5,11 @@ class SignInUpPageTextField extends StatelessWidget {
   final String label;
   final String hint;
   final TextInputType inputType;
-  bool obscureText;
-  IconButton? iconButton;
+  final bool obscureText;
+  final IconButton? iconButton;
+  final TextEditingController? controller;
 
-  SignInUpPageTextField({super.key, required this.label, required this.hint, required this.inputType, this.iconButton, this.obscureText = false});
+  const SignInUpPageTextField({super.key, required this.label, required this.hint, required this.inputType, this.iconButton, this.obscureText = false, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,10 @@ class SignInUpPageTextField extends StatelessWidget {
           Text(label, style: const TextStyle(color: primary, fontSize: 16, fontWeight: FontWeight.w600),),
           const SizedBox(height: 5,),
           TextField(
+            controller: controller,
             obscureText: obscureText,
+            autocorrect: false,
+            enableSuggestions: false,
             decoration: InputDecoration(
                 hintText: hint,
                 suffixIcon: iconButton,
