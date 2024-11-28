@@ -1,6 +1,7 @@
-import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:car_renr_app/utils/styles.dart';
+import 'package:car_renr_app/widgets/error_dialog.dart';
+import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/Login_divider.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/password_field.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_button.dart';
@@ -35,53 +36,31 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   void _loginAttempt (context) {
-    if (_validateInput()) {
-      final email = _email.text.trim();
-      final password = _password.text.trim();
+    if (!_validateInput()) return ;
 
-      print('Email: $email');
-      print('Password: $password');
+    final email = _email.text.trim();
+    final password = _password.text.trim();
 
-      // Navigator.pushReplacementNamed(context, '/main');
-    }
+    print('Email: $email');
+    print('Password: $password');
+
+    // Navigator.pushReplacementNamed(context, '/main');
   }
 
   bool _validateInput() {
     if (_email.text.trim().isEmpty ||
         _password.text.trim().isEmpty) {
-      _showErrorDialog('Validation Error','All fields are required.');
-      return false;
-    }
-
-    final emailRegex = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
-    if (!emailRegex.hasMatch(_email.text.trim())) {
-      _showErrorDialog('Validation Error','Please enter a valid email address.');
+      showErrorDialog(context, 'Validation Error','All fields are required.');
       return false;
     }
 
     return true;
   }
 
-  void _showErrorDialog(String? error,String? message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(error ?? 'Error'),
-        content: Text(message ?? 'An Unknown Error Occurred'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),

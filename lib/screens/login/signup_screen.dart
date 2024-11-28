@@ -1,12 +1,13 @@
-import 'package:car_renr_app/widgets/error_container.dart';
+import 'package:car_renr_app/models/message_box_type.dart';
 import 'package:car_renr_app/widgets/error_dialog.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:car_renr_app/widgets/toggle_message_box.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:car_renr_app/widgets/async_button.dart';
+import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
 import 'package:car_renr_app/utils/styles.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/Login_divider.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/password_field.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_button.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_textfield.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -17,11 +18,11 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final GlobalKey<ToggleMessageBoxState> _toggleMessageBoxKey = GlobalKey();
+
   late final TextEditingController _fullName;
   late final TextEditingController _email;
   late final TextEditingController _password;
-  bool _errorStatus = false;
-  String? _errorMessage;
 
   @override void initState() {
     // TODO: implement initState
@@ -45,28 +46,22 @@ class _SignUpPageState extends State<SignUpPage> {
     if (_fullName.text.trim().isEmpty ||
         _email.text.trim().isEmpty ||
         _password.text.trim().isEmpty) {
-      setState(() {
-        _errorStatus = true;
-        _errorMessage = 'All fields are required.';
-      });
 
-      return false;
-    }
+      _toggleMessageBoxKey.currentState?.updateState(true, 'All fields required', AlertType.error, true);
 
-    final emailRegex = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
-    if (!emailRegex.hasMatch(_email.text.trim())) {
-      setState(() {
-        _errorStatus = true;
-        _errorMessage = 'Please enter a valid email address.';
-      });
       return false;
     }
 
     return true;
   }
 
+  Future<void> _registerUser() async {
+    if (!_validateInput()) return ;
 
-  Future<bool?> registerUser(String email, String password, String name) async {
+    final email = _email.text.trim();
+    final password = _password.text.trim();
+    final name = _fullName.text.trim();
+
     try {
       // Create a new user with email and password
       UserCredential userCredential = await FirebaseAuth.instance
@@ -81,41 +76,36 @@ class _SignUpPageState extends State<SignUpPage> {
         await user.reload(); // Reload user to ensure the name is updated
       }
 
-      // Return success message or user ID
-      return true;
+      // show A message to user requiring to confirm email
+      _toggleMessageBoxKey.currentState
+          ?.updateState(
+              true,
+              'Thank you for signing up! We’ve sent a confirmation email to your registered email address (${_email.text.trim()}). Please check your inbox (and spam folder) to verify your email. Once verified, you’ll be able to log in and access your account.',
+              AlertType.success,
+              false
+      );
     } on FirebaseAuthException catch (e) {
       // Handle Firebase-specific errors
-      if (e.code == 'weak-password') {
-        setState(() {
-          _errorStatus = true;
-          _errorMessage = "The password provided is too weak.";
-        });
+
+      String errorMessage;
+      if (e.code == 'network-request-failed') {
+        showErrorDialog(context, 'Network Error', 'Make sure you are connected to network');
+        return ;
       } else if (e.code == 'email-already-in-use') {
-        setState(() {
-          _errorStatus = true;
-          _errorMessage = "The account already exists for that email.";
-        });
+        errorMessage = "The account already exists for that email.";
       } else if (e.code == 'invalid-email') {
-        setState(() {
-          _errorStatus = true;
-          _errorMessage = "The email address is not valid.";
-        });
-      } else if (e.code == 'network-request-failed') {
-        showErrorDialog(context, 'Network Error', 'Please make sure you are connected to a network');
-      } else  {
-        setState(() {
-          _errorStatus = true;
-          _errorMessage = "Registration failed: '${e.code}' ${e.message}";
-        });
+        errorMessage = "The email address is not valid.";
+      } else if (e.code == 'weak-password') {
+        errorMessage = "The password provided is too weak.";
+      } else {
+        errorMessage = "Registration failed: ${e.message}";
       }
-      return false;
+
+      // Show error message to user
+      _toggleMessageBoxKey.currentState?.updateState(true, errorMessage, AlertType.error, true);
     } catch (e) {
-      // Handle other errors
-      setState(() {
-        _errorStatus = true;
-        _errorMessage = "An error occurred: $e";
-      });
-      return false;
+      // Handle other errors and show to user
+      _toggleMessageBoxKey.currentState?.updateState(true, "An error occurred: $e", AlertType.error, true,);
     }
   }
 
@@ -129,7 +119,9 @@ class _SignUpPageState extends State<SignUpPage> {
               },
               icon: const Icon(Icons.arrow_back_ios_new, color: primary,)
           ),
+          backgroundColor: Colors.white,
         ),
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -159,26 +151,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(height: 20,),
                   PasswordField(controller: _password,),
                   const SizedBox(height: 20,),
-                  SignInUpPageButton(label: 'Register', onPressed: () async {
-                    // Navigator.pushNamed(context, '/otpVerification');
-                    if (_validateInput()) {
-
-                      final fullName = _fullName.text.trim();
-                      final email = _email.text.trim();
-                      final password = _password.text.trim();
-
-                      bool? result = await registerUser(email, password, fullName);
-                      bool status = result ?? false;
-                      print(status ? "User registered successfully" : _errorMessage); // Show result in UI (e.g., Snackbar or AlertDialog)
-                    }
-                  }),
+                  AsyncButton(label: 'Register', onPressed: _registerUser),
                   const SizedBox(height: 10,),
-                  _errorStatus ? ErrorContainer(message: _errorMessage ?? 'An error occurred', onPressed: () {
-                    setState(() {
-                      _errorStatus = false;
-                      _errorMessage = null;
-                    });
-                  },) : const SizedBox.shrink(),
+                  ToggleMessageBox(key: _toggleMessageBoxKey,),
                   const SizedBox(height: 20,),
                   const LoginDivider(label: 'or register with'),
                   const SizedBox(height: 20,),
@@ -211,7 +186,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 20,),
                 ]
             ),
           ),
@@ -219,4 +195,3 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-
