@@ -20,12 +20,10 @@ class _AsyncButtonState extends State<AsyncButton> {
       width: double.infinity,
       child: TextButton(
         style: primaryTextButtonStyle,
-        onPressed: widget.onPressed == null
-            ? null
-            : () async {
+        onPressed:  () async {
           setState(() => _isLoading = true);
           try {
-            await widget.onPressed!();
+            await widget.onPressed();
           } finally {
             setState(() => _isLoading = false);
           }
