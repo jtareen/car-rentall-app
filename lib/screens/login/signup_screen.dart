@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:car_renr_app/utils/styles.dart';
 import 'package:car_renr_app/models/message_box_type.dart';
 import 'package:car_renr_app/widgets/error_dialog.dart';
 import 'package:car_renr_app/widgets/toggle_message_box.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:car_renr_app/widgets/async_button.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
-import 'package:car_renr_app/utils/styles.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/Login_divider.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/password_field.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_textfield.dart';
@@ -36,6 +36,10 @@ class _SignUpPageState extends State<SignUpPage> {
   @override void dispose() {
     // TODO: implement dispose
     super.dispose();
+
+    _fullName.text = '';
+    _email.text = '';
+    _password.text = '';
 
     _fullName.dispose();
     _email.dispose();
@@ -74,22 +78,18 @@ class _SignUpPageState extends State<SignUpPage> {
         // Update the user's display name
         await user.updateDisplayName(name);
         await user.reload(); // Reload user to ensure the name is updated
+
+        _navigateToVerificationPage();
+      } else {
+        throw Exception('Registration Failed: Something went wrong');
       }
 
-      // show A message to user requiring to confirm email
-      _toggleMessageBoxKey.currentState
-          ?.updateState(
-              true,
-              'Thank you for signing up! We’ve sent a confirmation email to your registered email address (${_email.text.trim()}). Please check your inbox (and spam folder) to verify your email. Once verified, you’ll be able to log in and access your account.',
-              AlertType.success,
-              false
-      );
     } on FirebaseAuthException catch (e) {
       // Handle Firebase-specific errors
 
       String errorMessage;
       if (e.code == 'network-request-failed') {
-        showErrorDialog(context, 'Network Error', 'Make sure you are connected to network');
+        _showErrorDialog('Network Error', 'Make sure you are connected to network');
         return ;
       } else if (e.code == 'email-already-in-use') {
         errorMessage = "The account already exists for that email.";
@@ -107,6 +107,14 @@ class _SignUpPageState extends State<SignUpPage> {
       // Handle other errors and show to user
       _toggleMessageBoxKey.currentState?.updateState(true, "An error occurred: $e", AlertType.error, true,);
     }
+  }
+
+  void _navigateToVerificationPage () {
+    Navigator.pushNamed(context, '/emailVerification');
+  }
+
+  void  _showErrorDialog (title, message) {
+    showErrorDialog(context, title, message);
   }
 
   @override
@@ -145,6 +153,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   const SizedBox(height: 20,),
+                  ToggleMessageBox(key: _toggleMessageBoxKey,),
+                  const SizedBox(height: 10,),
                   SignInUpPageTextField(label: 'Full name', hint: 'Your full name', inputType: TextInputType.text, controller: _fullName,),
                   const SizedBox(height: 20,),
                   SignInUpPageTextField(label: 'Email Address', hint: 'Your email address', inputType: TextInputType.emailAddress, controller: _email,),
@@ -152,8 +162,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   PasswordField(controller: _password,),
                   const SizedBox(height: 20,),
                   AsyncButton(label: 'Register', onPressed: _registerUser),
-                  const SizedBox(height: 10,),
-                  ToggleMessageBox(key: _toggleMessageBoxKey,),
                   const SizedBox(height: 20,),
                   const LoginDivider(label: 'or register with'),
                   const SizedBox(height: 20,),
