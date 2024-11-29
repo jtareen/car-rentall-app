@@ -1,10 +1,13 @@
+import 'package:car_renr_app/models/message_box_type.dart';
+import 'package:car_renr_app/widgets/async_button.dart';
+import 'package:car_renr_app/widgets/toggle_message_box.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:car_renr_app/utils/styles.dart';
 import 'package:car_renr_app/widgets/error_dialog.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/Login_divider.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/password_field.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_button.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_textfield.dart';
 
 class SignInPage extends StatefulWidget {
@@ -17,7 +20,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-
+  final GlobalKey<ToggleMessageBoxState> _toggleMessageBoxKey = GlobalKey();
 
 
   @override
@@ -35,26 +38,68 @@ class _SignInPageState extends State<SignInPage> {
     super.dispose();
   }
 
-  void _loginAttempt (context) {
+  Future<void> _loginAttempt () async {
     if (!_validateInput()) return ;
 
     final email = _email.text.trim();
     final password = _password.text.trim();
 
-    print('Email: $email');
-    print('Password: $password');
+    try {
+      // Sign in using email and password
+      UserCredential userCredential = await FirebaseAuth.
+         instance.signInWithEmailAndPassword(email: email, password: password);
 
-    // Navigator.pushReplacementNamed(context, '/main');
+      User? user = userCredential.user;
+
+      if (user != null) {
+        // check if user is verified or not
+        if (user.emailVerified) {
+            _loginToApp();
+        } else {
+          _navigateToVerificationPage ();
+        }
+      } else {
+        throw Exception('Unknown Error: user not retrieved');
+      }
+
+    } on FirebaseAuthException catch (e) {
+      String message;
+      if (e.code == 'network-request-failed') {
+        _showErrorDialog('Network Error', 'Make sure you are connected to network');
+        return ;
+      } else if (e.code == 'invalid-email') {
+        message = 'Please enter a valid email address';
+      } else if (e.code == 'invalid-credential') {
+        message = 'Provided Email and Password do not match. Please provide valid credentials.';
+      } else {
+        message = "Login failed: ${e.message}";
+      }
+
+      _toggleMessageBoxKey.currentState?.updateState(true, message, AlertType.error, true);
+    } catch (e) {
+      _toggleMessageBoxKey.currentState?.updateState(true, e.toString(), AlertType.error, true);
+    }
   }
 
   bool _validateInput() {
     if (_email.text.trim().isEmpty ||
         _password.text.trim().isEmpty) {
-      showErrorDialog(context, 'Validation Error','All fields are required.');
+      _toggleMessageBoxKey.currentState?.updateState(true, 'All fields are required.', AlertType.error, true);
       return false;
     }
-
     return true;
+  }
+
+  void  _showErrorDialog (title, message) {
+    showErrorDialog(context, title, message);
+  }
+
+  void _loginToApp () {
+    Navigator.pushReplacementNamed(context, '/main');
+  }
+
+  void _navigateToVerificationPage () {
+    Navigator.pushNamed(context, '/emailVerification');
   }
 
   @override
@@ -84,11 +129,13 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     const SizedBox(height: 20,),
+                    ToggleMessageBox(key: _toggleMessageBoxKey,),
+                    const SizedBox(height: 10,),
                     SignInUpPageTextField(label: 'Email Address', hint: 'Your email address', inputType: TextInputType.emailAddress, controller: _email,),
                     const SizedBox(height: 20,),
                     PasswordField(controller: _password ,),
                     const SizedBox(height: 20,),
-                    SignInUpPageButton(label: 'Login', onPressed: () => _loginAttempt(context)),
+                    AsyncButton(label: 'Login', onPressed: _loginAttempt,),
                     const SizedBox(height: 20,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
