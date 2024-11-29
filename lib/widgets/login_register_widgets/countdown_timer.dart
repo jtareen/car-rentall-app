@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 
 class CountdownTimer extends StatefulWidget {
   final int duration;
+  final Widget timeUpWidget;
 
-  const CountdownTimer({super.key, this.duration = 60});
+  const CountdownTimer({super.key, this.duration = 60, this.timeUpWidget = const Text('Time Up')});
 
   @override
-  _CountdownTimerState createState() => _CountdownTimerState();
+  State<CountdownTimer> createState() => CountdownTimerState();
 }
 
-class _CountdownTimerState extends State<CountdownTimer> {
+class CountdownTimerState extends State<CountdownTimer> {
   int _remainingTime = 0; // Time in seconds (default 1 minute)
-  String? _timerMessage;
+  bool _timeUp = false;
   Timer? _timer;
 
   void _startTimer(int duration) {
     _remainingTime = duration; // Set the duration
-    _timerMessage = null; // Set message to null if countdown in start
+    _timeUp = false; // Set the time up to false
     _timer?.cancel(); // Cancel any previous timer
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
@@ -25,13 +26,17 @@ class _CountdownTimerState extends State<CountdownTimer> {
           _remainingTime--;
         } else {
           _timer?.cancel(); // Stop the timer when it reaches 0
-          _timerMessage = 'Time up!'; // Assign a message to show when time is up
+          _timeUp = true; // Assign a message to show when time is up
         }
       });
     });
   }
 
-  @override @override
+  void restartTimer () {
+    _startTimer(widget.duration);
+  }
+
+  @override
   void initState() {
     super.initState();
     _remainingTime = widget.duration;
@@ -56,8 +61,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              _timerMessage ?? _formatTime(_remainingTime), // Display remaining time
+            _timeUp ? widget.timeUpWidget : Text(
+              _formatTime(_remainingTime), // Display remaining time
               style: const TextStyle(fontSize: 15, letterSpacing: 1, fontWeight: FontWeight.w500),
             ),
           ],

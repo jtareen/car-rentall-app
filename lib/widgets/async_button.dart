@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class AsyncButton extends StatefulWidget {
   final String label;
-  final Future<void> Function()? onPressed;
+  final Future<void> Function() onPressed;
 
-  const AsyncButton({super.key, required this.label, this.onPressed});
+  const AsyncButton({super.key, required this.label, required this.onPressed});
 
   @override
   State<AsyncButton> createState() => _AsyncButtonState();
