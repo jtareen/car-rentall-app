@@ -2,14 +2,14 @@ import 'package:car_renr_app/utils/styles.dart';
 import 'package:car_renr_app/widgets/pagination_indicator.dart';
 import 'package:flutter/material.dart';
 
-class HomeHeroWidget extends StatefulWidget {
-  const HomeHeroWidget({super.key});
+class MainHeroWidget extends StatefulWidget {
+  const MainHeroWidget({super.key});
 
   @override
-  _homeHeroWidgetState createState() => _homeHeroWidgetState();
+  State<MainHeroWidget> createState() => _MainHeroWidgetState();
 }
 
-class _homeHeroWidgetState extends State<HomeHeroWidget> {
+class _MainHeroWidgetState extends State<MainHeroWidget> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
 

@@ -77,7 +77,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   void _navigateToNextPage() {
     // Redirect to the next page after successful verification
-    Navigator.pushReplacementNamed(context, '/main'); // Replace '/main' with your actual route
+    Navigator.pushReplacementNamed(context, '/bottomNavBar'); // Replace '/main' with your actual route
   }
 
   @override

@@ -1,41 +1,14 @@
-import 'package:car_renr_app/screens/login/signin_screen.dart';
-import 'package:car_renr_app/utils/styles.dart';
-import 'package:car_renr_app/widgets/pagination_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+import '../../utils/styles.dart';
+import '../../widgets/pagination_indicator.dart';
+import '../../controllers/on_boarding_controller.dart';
 
-  @override
-  _OnboardingScreenState createState() => _OnboardingScreenState();
-}
+class OnboardingScreen extends StatelessWidget {
+  OnboardingScreen({super.key});
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
-  final PageController _pageController = PageController();
-  int _currentIndex = 0;
-
-  void _getStarted () {
-    Navigator.pushReplacementNamed(context, '/signin');
-  }
-
-  void _nextPage() {
-    if (_currentIndex < 2) {
-      _pageController.animateToPage(
-        _currentIndex + 1,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    }
-    else {
-      _getStarted();
-    }
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
+  final obController = OnboardingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,61 +17,41 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           Expanded(
             child: PageView(
-              controller: _pageController,
-              //physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              children: const [
-                BuildPage(
-                  imagePath: 'assets/images/onboarding_01.jpeg',
-                  title: 'Endless option',
-                  description: "Choose from hundreds of models you won't find anywhere else. Pick it up or get it delivered where you want it.",
-                ),
-                BuildPage(
-                  imagePath: 'assets/images/onboarding_02.jpeg',
-                  title: 'Drive confidently',
-                  description: "Drive confidently with your choice of protection plans. All plans include varying level of insurance from Fakeh insurance",
-                ),
-                BuildPage(
-                  imagePath: 'assets/images/onboarding_03.jpeg',
-                  title: '24/7 Support',
-                  description: "Rest easy knowing everyone in Pikbil community is screened and support road aside assistant.",
-                ),
-              ],
+              controller: obController.controller,
+              onPageChanged: obController.onPageChangedCallback,
+              children: obController.pages
             ),
           ),
           // Pagination indicators
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Row(
-              children: [
-                Expanded(
-                  child: PaginationIndicator(currentIndex: _currentIndex, itemCount: 3, activeColor: primary,)),
-
-                _currentIndex == 2 ? const SizedBox.shrink() : TextButton(
-                  onPressed: _getStarted,
-                  style: secondaryTextButtonStyle,
-                  child: const Text('Skip'),
-                ),
-                const SizedBox(width: 5,),
-                GestureDetector(
-                  onTap: _nextPage,
-                  child: AnimatedContainer(
-                    width: _currentIndex == 2 ? 120 : 80,
-                    height: 45,
-                    duration: Duration(milliseconds: 200),
-                    // padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-                    decoration: BoxDecoration(
-                      color: primary,
-                      borderRadius: BorderRadius.circular(15)
-                    ),
-                    child: Center(child: Text(_currentIndex == 2 ? 'Get Started' : 'Next', style: TextStyle(color: Colors.white),)),
+          Obx(
+            () => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: PaginationIndicator(currentIndex: obController.currentPage.value, itemCount: 3, activeColor: primary,)),
+            
+                  obController.currentPage.value == 2 ? const SizedBox.shrink() : TextButton(
+                    onPressed: obController.getStarted,
+                    style: secondaryTextButtonStyle,
+                    child: const Text('Skip'),
                   ),
-                )
-              ],
+                  const SizedBox(width: 5,),
+                  GestureDetector(
+                    onTap: obController.animateToNextPage,
+                    child: AnimatedContainer(
+                      width: obController.currentPage.value == 2 ? 120 : 80,
+                      height: 45,
+                      duration: const Duration(milliseconds: 200),
+                      decoration: BoxDecoration(
+                        color: primary,
+                        borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Center(child: Text(obController.currentPage.value == 2 ? 'Get Started' : 'Next', style: const TextStyle(color: Colors.white),)),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 40),
@@ -109,55 +62,3 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 
-class BuildPage extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String description;
-
-  const BuildPage({
-    super.key,
-    required this.imagePath,
-    required this.title,
-    required this.description,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(padding: const EdgeInsets.symmetric(horizontal:  30.0), child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        LayoutBuilder(
-          builder: (context, constraints) {
-            double imageWidth = constraints.maxWidth;
-            if (constraints.maxWidth > 400) { // Adjust the size condition as needed
-              imageWidth = 400; // Limit the image width to 600 when screen width is larger
-            }
-            return Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(40),
-                child: Image.asset(
-                  imagePath,
-                  width: imageWidth,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 20),
-        Text(
-          title,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          description,
-          textAlign: TextAlign.start,
-          style: const TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-        const SizedBox(height: 20),
-      ],
-    ),);
-  }
-}

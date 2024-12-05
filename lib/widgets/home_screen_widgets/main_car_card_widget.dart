@@ -2,10 +2,10 @@ import 'package:car_renr_app/models/car_class.dart';
 import 'package:car_renr_app/utils/styles.dart';
 import 'package:flutter/material.dart';
 
-class HomeCarCardWidget extends StatelessWidget {
+class MainCarCardWidget extends StatelessWidget {
   final Car car;
 
-  const HomeCarCardWidget({
+  const MainCarCardWidget({
     super.key,
     required this.car
   });

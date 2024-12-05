@@ -95,7 +95,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   void _loginToApp () {
-    Navigator.pushReplacementNamed(context, '/main');
+    Navigator.pushReplacementNamed(context, '/bottomNavBar');
   }
 
   void _navigateToVerificationPage () {

@@ -1,8 +1,8 @@
 import 'package:car_renr_app/utils/styles.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreenHeader extends StatelessWidget {
-  const HomeScreenHeader({super.key});
+class MainScreenHeader extends StatelessWidget {
+  const MainScreenHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
