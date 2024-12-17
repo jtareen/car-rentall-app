@@ -1,3 +1,4 @@
+import 'package:car_renr_app/models/signin_textfield_model.dart';
 import 'package:flutter/material.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_textfield.dart';
 
@@ -24,6 +25,7 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return SignInUpPageTextField(
+      model: SignInUpPageTextFieldModel(
         controller: widget.controller,
         label: widget.label,
         hint: widget.hint,
@@ -36,6 +38,7 @@ class _PasswordFieldState extends State<PasswordField> {
               color: Colors.grey,
             )
         )
+      ),
     );
   }
 }

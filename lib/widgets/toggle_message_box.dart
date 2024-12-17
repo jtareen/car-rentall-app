@@ -1,30 +1,14 @@
-import 'package:car_renr_app/models/message_box_type.dart';
+import 'package:car_renr_app/constants/message_box_type.dart';
+import 'package:car_renr_app/controllers/toggle_message_box_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class ToggleMessageBox extends StatefulWidget {
-  const ToggleMessageBox({super.key});
+class ToggleMessageBox extends StatelessWidget {
+  ToggleMessageBox({super.key});
+  final controller = Get.put(ToggleMessageBoxController());
 
-  @override
-  State<ToggleMessageBox> createState() => ToggleMessageBoxState();
-}
-
-class ToggleMessageBoxState extends State<ToggleMessageBox> {
-  bool _messageBoxVisibility = false;
-  bool _showIcon = false;
-  String? _message;
-  AlertType _type = AlertType.success;
-  late Map<String, dynamic> _style;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _style = _getStyle();
-  }
-
-  Map<String, dynamic> _getStyle() {
-    switch (_type) {
+  Map<String, dynamic> _getStyle(AlertType type) {
+    switch (type) {
       case AlertType.error:
         return {'backgroundColor': const Color.fromRGBO(253, 237, 237, 1), 'icon': Icons.error_outline, 'color': const Color.fromRGBO(95, 33, 32, 1)};
       case AlertType.warning:
@@ -37,59 +21,47 @@ class ToggleMessageBoxState extends State<ToggleMessageBox> {
     }
   }
 
-  // Method to update state
-  void updateState(bool visibility, String? message, AlertType type, bool showIcon) {
-    setState(() {
-      _messageBoxVisibility = visibility;
-      _message = message;
-      _showIcon = showIcon;
-      _type = type;
-    _style = _getStyle();
-    });
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
-    if (!_messageBoxVisibility) return const SizedBox.shrink();
 
-    return Container(
-      width: double.infinity,
-      alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-      decoration: BoxDecoration(
-        color: _style['backgroundColor'],
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: _style['color']
-        )
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(child: Row(
-            children: [
-              Icon(_style['icon'], color: _style['color'],),
-              const SizedBox(width: 20,),
-              Flexible(child: Text(_message ?? '', style: TextStyle(color: _style['color']),)),
-              const SizedBox(width: 20,),
-            ],
-          )),
-          _showIcon
-              ? IconButton(
-            onPressed: () {
-              setState(() {
-                _messageBoxVisibility = false;
-                _message = null;
-              });
-            },
-            icon: Icon(Icons.close, color: _style['color'],),
-          )
-              : const SizedBox.shrink(),
-        ],
-      ),
+    return Obx(() {
+      if (!controller.isVisible.value) return const SizedBox.shrink();
+
+      final style = _getStyle(controller.alertType.value);
+
+      return Container(
+        width: double.infinity,
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        decoration: BoxDecoration(
+            color: style['backgroundColor'],
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+                color: style['color']
+            )
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(child: Row(
+              children: [
+                Icon(style['icon'], color: style['color'],),
+                const SizedBox(width: 20,),
+                Flexible(child: Text(controller.message.value ?? '', style: TextStyle(color: style['color']),)),
+                const SizedBox(width: 20,),
+              ],
+            )),
+            controller.showIcon.value
+                ? IconButton(
+              onPressed: controller.hideMessage,
+              icon: Icon(Icons.close, color: style['color'],),
+            )
+                : const SizedBox.shrink(),
+          ],
+        ),
+      );
+    }
     );
   }
 }

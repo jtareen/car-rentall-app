@@ -1,4 +1,4 @@
-import 'package:car_renr_app/utils/styles.dart';
+import 'package:car_renr_app/constants/styles.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/countdown_timer.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/otp_text_field.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_button.dart';
@@ -73,7 +73,7 @@ class OtpVerificationScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20,),
-                const CountdownTimer(duration: 30,),
+                CountdownTimer(duration: 30,),
                 const SizedBox(height: 20,),
                 SignInUpPageButton(label: 'Continue', onPressed: (){
                     if (isAccountRecovery) {

@@ -1,20 +1,26 @@
-import 'package:car_renr_app/screens/login/email_verification_screen.dart';
-import 'package:car_renr_app/screens/main/main_screen.dart';
+import 'package:car_renr_app/controllers/authentication_controller.dart';
+import 'package:car_renr_app/views/login/email_verification_screen.dart';
+import 'package:car_renr_app/views/main/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:car_renr_app/firebase_options.dart';
-import 'package:car_renr_app/screens/onboarding/onboarding_screen.dart';
-import 'package:car_renr_app/screens/login/forgot_password_screen.dart';
-import 'package:car_renr_app/screens/login/otp_verification_screen.dart';
-import 'package:car_renr_app/screens/login/recover_account_screen.dart';
-import 'package:car_renr_app/screens/login/signin_screen.dart';
-import 'package:car_renr_app/screens/login/signup_screen.dart';
-import 'package:car_renr_app/screens/main/bottom_nav_bar.dart';
+import 'package:car_renr_app/views/onboarding/onboarding_screen.dart';
+import 'package:car_renr_app/views/login/forgot_password_screen.dart';
+import 'package:car_renr_app/views/login/otp_verification_screen.dart';
+import 'package:car_renr_app/views/login/recover_account_screen.dart';
+import 'package:car_renr_app/views/login/signin_screen.dart';
+import 'package:car_renr_app/views/login/signup_screen.dart';
+import 'package:car_renr_app/views/main/bottom_nav_bar.dart';
 import 'package:get/get.dart';
 
 void main() async {
     WidgetsFlutterBinding.ensureInitialized();
+    Firebase.initializeApp(
+             options: DefaultFirebaseOptions.currentPlatform
+    ).then(
+            (value) => Get.put(AuthenticationController())
+    );
     runApp(const MainApp());
 }
 
@@ -23,9 +29,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return const GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: OnboardingScreen(),
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
     );
   }
 }

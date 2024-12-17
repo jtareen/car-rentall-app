@@ -1,31 +1,27 @@
-import 'package:car_renr_app/utils/styles.dart';
+import 'package:car_renr_app/constants/styles.dart';
+import 'package:car_renr_app/models/signin_textfield_model.dart';
 import 'package:flutter/material.dart';
 
 class SignInUpPageTextField extends StatelessWidget {
-  final String label;
-  final String hint;
-  final TextInputType inputType;
-  final bool obscureText;
-  final IconButton? iconButton;
-  final TextEditingController? controller;
+  final SignInUpPageTextFieldModel model;
 
-  const SignInUpPageTextField({super.key, required this.label, required this.hint, required this.inputType, this.iconButton, this.obscureText = false, this.controller});
+  const SignInUpPageTextField({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: primary, fontSize: 16, fontWeight: FontWeight.w600),),
+          Text(model.label, style: const TextStyle(color: primary, fontSize: 16, fontWeight: FontWeight.w600),),
           const SizedBox(height: 5,),
           TextField(
-            controller: controller,
-            obscureText: obscureText,
+            controller: model.controller,
+            obscureText: model.obscureText,
             autocorrect: false,
             enableSuggestions: false,
             decoration: InputDecoration(
-                hintText: hint,
-                suffixIcon: iconButton,
+                hintText: model.hint,
+                suffixIcon: model.iconButton,
                 hintStyle: const TextStyle(
                     color: Colors.grey
                 ),
@@ -38,7 +34,7 @@ class SignInUpPageTextField extends StatelessWidget {
                     borderSide: const BorderSide(color: primary)
                 )
             ),
-            keyboardType: inputType,
+            keyboardType: model.inputType,
           )
         ]
     );

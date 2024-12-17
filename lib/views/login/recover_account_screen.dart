@@ -1,4 +1,4 @@
-import 'package:car_renr_app/utils/styles.dart';
+import 'package:car_renr_app/constants/styles.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/password_field.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_button.dart';
 import 'package:flutter/material.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../models/onboarding_model.dart';
-import '../screens/login/signin_screen.dart';
+import '../views/login/signin_screen.dart';
 import '../widgets/onboarding_widgets/onboarding_page_widget.dart';
 
 class OnboardingController extends GetxController{
@@ -35,7 +35,7 @@ class OnboardingController extends GetxController{
   ];
 
   onPageChangedCallback (int activePageIndex) => currentPage.value = activePageIndex;
-  getStarted () => Get.offAll(() => const SignInPage());
+  getStarted () => Get.offAll(() => SignInPage());
 
   void animateToNextPage() {
     if (currentPage.value < 2) {

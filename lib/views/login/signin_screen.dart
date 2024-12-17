@@ -1,106 +1,24 @@
-import 'package:car_renr_app/models/message_box_type.dart';
+import 'package:car_renr_app/controllers/signin_screen_controller.dart';
+import 'package:car_renr_app/models/signin_textfield_model.dart';
+import 'package:car_renr_app/views/login/forgot_password_screen.dart';
+import 'package:car_renr_app/views/login/signup_screen.dart';
 import 'package:car_renr_app/widgets/async_button.dart';
 import 'package:car_renr_app/widgets/toggle_message_box.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:car_renr_app/utils/styles.dart';
-import 'package:car_renr_app/widgets/error_dialog.dart';
+import 'package:car_renr_app/constants/styles.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/Login_divider.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/password_field.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_textfield.dart';
+import 'package:get/get.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+import '../../constants/message_box_type.dart';
+import '../../widgets/error_dialog.dart';
 
-  @override
-  State<SignInPage> createState () => _SignInPageState ();
-}
-
-class _SignInPageState extends State<SignInPage> {
-  late final TextEditingController _email;
-  late final TextEditingController _password;
-  final GlobalKey<ToggleMessageBoxState> _toggleMessageBoxKey = GlobalKey();
-
-
-  @override
-  void initState() {
-    _email = TextEditingController();
-    _password = TextEditingController();
-
-    super.initState();
-  }
-
-  @override void dispose() {
-    _email.dispose();
-    _password.dispose();
-
-    super.dispose();
-  }
-
-  Future<void> _loginAttempt () async {
-    if (!_validateInput()) return ;
-
-    final email = _email.text.trim();
-    final password = _password.text.trim();
-
-    try {
-      // Sign in using email and password
-      UserCredential userCredential = await FirebaseAuth.
-         instance.signInWithEmailAndPassword(email: email, password: password);
-
-      User? user = userCredential.user;
-
-      if (user != null) {
-        // check if user is verified or not
-        if (user.emailVerified) {
-            _loginToApp();
-        } else {
-          _navigateToVerificationPage ();
-        }
-      } else {
-        throw Exception('Unknown Error: user not retrieved');
-      }
-
-    } on FirebaseAuthException catch (e) {
-      String message;
-      if (e.code == 'network-request-failed') {
-        _showErrorDialog('Network Error', 'Make sure you are connected to network');
-        return ;
-      } else if (e.code == 'invalid-email') {
-        message = 'Please enter a valid email address';
-      } else if (e.code == 'invalid-credential') {
-        message = 'Provided Email and Password do not match. Please provide valid credentials.';
-      } else {
-        message = "Login failed: ${e.message}";
-      }
-
-      _toggleMessageBoxKey.currentState?.updateState(true, message, AlertType.error, true);
-    } catch (e) {
-      _toggleMessageBoxKey.currentState?.updateState(true, e.toString(), AlertType.error, true);
-    }
-  }
-
-  bool _validateInput() {
-    if (_email.text.trim().isEmpty ||
-        _password.text.trim().isEmpty) {
-      _toggleMessageBoxKey.currentState?.updateState(true, 'All fields are required.', AlertType.error, true);
-      return false;
-    }
-    return true;
-  }
-
-  void  _showErrorDialog (title, message) {
-    showErrorDialog(context, title, message);
-  }
-
-  void _loginToApp () {
-    Navigator.pushReplacementNamed(context, '/bottomNavBar');
-  }
-
-  void _navigateToVerificationPage () {
-    Navigator.pushNamed(context, '/emailVerification');
-  }
+class SignInPage extends StatelessWidget {
+  SignInPage({super.key});
+  final controller = Get.put(SignInScreenController());
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +30,8 @@ class _SignInPageState extends State<SignInPage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
+                    /*  Top Section  */
                     const SizedBox(height: 50,),
                     const Text(
                       'Welcome to, Pikbil 👌',
@@ -129,20 +49,34 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     const SizedBox(height: 20,),
-                    ToggleMessageBox(key: _toggleMessageBoxKey,),
+                    /*  Top Section  */
+
+                    ToggleMessageBox(),
+
+                    /*  Form Section  */
                     const SizedBox(height: 10,),
-                    SignInUpPageTextField(label: 'Email Address', hint: 'Your email address', inputType: TextInputType.emailAddress, controller: _email,),
+                    SignInUpPageTextField(
+                      model: SignInUpPageTextFieldModel(
+                        label: 'Email Address',
+                        hint: 'Your email address',
+                        inputType: TextInputType.emailAddress,
+                        controller: controller.email,
+                      ),
+                    ),
                     const SizedBox(height: 20,),
-                    PasswordField(controller: _password ,),
+                    PasswordField(controller: controller.password ,),
                     const SizedBox(height: 20,),
-                    AsyncButton(label: 'Login', onPressed: _loginAttempt,),
+                    AsyncButton(label: 'Login', onPressed: controller.loginAttempt,),
                     const SizedBox(height: 20,),
+                    /*  Form Section  */
+
+                    /*  Footer Section  */
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         InkWell(
                             onTap: () {
-                              Navigator.pushNamed(context, '/forgotpassword');
+                              Get.to(() => const ForgotPasswordPage());
                             },
                             child: const Text('Forgot password?', style: TextStyle(color: Colors.grey),)
                         )
@@ -166,9 +100,7 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                           ),
                           InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/signup');
-                            },
+                            onTap: () => Get.to(() => SignUpPage()),
                             child: const Text(
                               "Register",
                               style: TextStyle(
@@ -181,6 +113,7 @@ class _SignInPageState extends State<SignInPage> {
                         ],
                       ),
                     )
+                    /*  Footer Section  */
                   ]
               ),
             )
@@ -188,3 +121,4 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 }
+

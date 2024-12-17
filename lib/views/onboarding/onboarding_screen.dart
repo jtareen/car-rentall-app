@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../utils/styles.dart';
+import '../../constants/styles.dart';
 import '../../widgets/pagination_indicator.dart';
 import '../../controllers/on_boarding_controller.dart';
 

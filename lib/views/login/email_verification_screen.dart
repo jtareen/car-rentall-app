@@ -1,90 +1,15 @@
-import 'dart:async';
-
-import 'package:car_renr_app/utils/styles.dart';
+import 'package:car_renr_app/constants/styles.dart';
+import 'package:car_renr_app/controllers/email_verification_controller.dart';
 import 'package:car_renr_app/widgets/async_button.dart';
 import 'package:car_renr_app/widgets/login_register_widgets/countdown_timer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class EmailVerificationScreen extends StatefulWidget {
-  const EmailVerificationScreen({super.key});
+class EmailVerificationScreen extends StatelessWidget {
+  EmailVerificationScreen({super.key});
 
-  @override
-  State<EmailVerificationScreen> createState() => _EmailVerificationScreenState();
-}
-
-class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
-  final GlobalKey<CountdownTimerState> _countdownTimerKey = GlobalKey();
-  bool _isVerifying = false;
-  bool _isEmailVerified = false;
-  late final User? _currentUser;
-  late final Timer _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentUser = FirebaseAuth.instance.currentUser;
-    _isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-
-    if (_currentUser != null) {
-      _sendVerificationEmail();
-      // Automatically refresh every 5 seconds to check if the email is verified
-      _timer = Timer.periodic(const Duration(seconds: 5), (_) {
-        _checkEmailVerification();
-      });
-    }
-  }
-
-  Future<void> _checkEmailVerification() async {
-    await FirebaseAuth.instance.currentUser!.reload();
-
-    setState(() {
-      _isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    });
-    if (_isEmailVerified) {
-      _timer.cancel(); // Stop the timer once verified
-      _navigateToNextPage();
-    }
-  }
-
-  Future<void> _sendVerificationEmail() async {
-    if (_currentUser != null && !_isVerifying) {
-      setState(() {
-        _isVerifying = true;
-      });
-
-      try {
-        await _currentUser.sendEmailVerification();
-        _countdownTimerKey.currentState?.restartTimer();
-        _showSnackBar('Verification email sent to your email');
-      } catch (e) {
-        _showSnackBar('Error sending verification email: $e');
-      } finally {
-        setState(() {
-          _isVerifying = false;
-        });
-      }
-    }
-  }
-
-  void _showSnackBar (String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
-  void _navigateToNextPage() {
-    // Redirect to the next page after successful verification
-    Navigator.pushReplacementNamed(context, '/bottomNavBar'); // Replace '/main' with your actual route
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
+  final controller = Get.put(EmailVerificationController());
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +49,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   children: [
                     const TextSpan(text: "A verification link has been sent to "),
                     TextSpan(
-                      text: _currentUser?.email ?? 'example@email.com',
+                      text: controller.userEmail,
                       style: const TextStyle(
                         color: primary,
                         fontWeight: FontWeight.bold,
@@ -140,7 +65,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 duration: 30,
                 timeUpWidget: AsyncButton(
                   label: 'Resend Verification Email',
-                  onPressed: _sendVerificationEmail
+                  onPressed: controller.sendVerificationEmail
                 )),
               const SizedBox(height: 10),
               const Text(

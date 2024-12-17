@@ -1,5 +1,5 @@
 import 'package:car_renr_app/models/car_class.dart';
-import 'package:car_renr_app/utils/styles.dart';
+import 'package:car_renr_app/constants/styles.dart';
 import 'package:flutter/material.dart';
 
 class MainCarCardWidget extends StatelessWidget {

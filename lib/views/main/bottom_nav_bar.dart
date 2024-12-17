@@ -1,8 +1,8 @@
-import 'package:car_renr_app/screens/main/chats_screen.dart';
-import 'package:car_renr_app/screens/main/main_screen.dart';
-import 'package:car_renr_app/screens/main/profile_screen.dart';
-import 'package:car_renr_app/screens/main/trips_screen.dart';
-import 'package:car_renr_app/utils/styles.dart';
+import 'package:car_renr_app/views/main/chats_screen.dart';
+import 'package:car_renr_app/views/main/main_screen.dart';
+import 'package:car_renr_app/views/main/profile_screen.dart';
+import 'package:car_renr_app/views/main/trips_screen.dart';
+import 'package:car_renr_app/constants/styles.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {

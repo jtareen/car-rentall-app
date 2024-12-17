@@ -1,4 +1,6 @@
-import 'package:car_renr_app/utils/styles.dart';
+import 'package:car_renr_app/constants/styles.dart';
+import 'package:car_renr_app/controllers/authentication_controller.dart';
+import 'package:car_renr_app/widgets/async_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_common/get_reset.dart';
@@ -91,6 +93,8 @@ class ProfileScreen extends StatelessWidget {
                     title: const Text("Notification"),
                     onTap: () {},
                   ),
+                  const SizedBox(height: 20,),
+                  AsyncButton(label: 'Sign Out', onPressed: AuthenticationController.instance.signOut)
                 ],
               ),
             ),
