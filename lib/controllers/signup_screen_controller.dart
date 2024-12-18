@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/message_box_type.dart';
-import '../widgets/toggle_message_box.dart';
 
 class SignUpScreenController extends GetxController {
   static SignUpScreenController get instance => Get.find();
@@ -34,11 +33,13 @@ class SignUpScreenController extends GetxController {
     if (!validateInput()) return;
 
     try {
-      await AuthenticationController.instance.registerUser(
+      final auth = AuthenticationController.instance;
+      await auth.registerUser(
           email.text.trim(),
           password.text,
           fullName.text.trim()
       );
+      auth.setInitialScreen(auth.firebaseUser.value);
     } catch (e) {
       toggleMessageBoxController.updateState(
           true,

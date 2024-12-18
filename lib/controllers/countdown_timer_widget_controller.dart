@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:get/get.dart';
 
 class CountdownTimerController extends GetxController {
+  static CountdownTimerController get instance => Get.find();
+
   var remainingTime = 30.obs; // Remaining time in seconds (default is 60)
   var timeUp = false.obs; // Time up state
 

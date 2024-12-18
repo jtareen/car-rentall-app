@@ -14,10 +14,11 @@ class AuthenticationController extends GetxController {
   @override void onReady() {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
-    ever(firebaseUser, _setInitialScreen);
+    setInitialScreen(firebaseUser.value);
+    // ever(firebaseUser, _setInitialScreen);
   }
 
-  _setInitialScreen(User? user) {
+  setInitialScreen(User? user) {
     user == null
         ? Get.offAll(() => SignInPage())
         : user.emailVerified
@@ -69,12 +70,6 @@ class AuthenticationController extends GetxController {
     } catch (e) {
       throw ("Error", "Failed to send verification email: $e");
     }
-  }
-
-  Future<bool> checkEmailVerification() async {
-    await firebaseUser.value?.reload();
-    firebaseUser.value = _auth.currentUser;
-    return firebaseUser.value?.emailVerified ?? false;
   }
   /*  Email Verification  */
 

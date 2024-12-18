@@ -26,8 +26,10 @@ class SignInScreenController extends GetxController {
     if (!_validateInput()) return;
 
     try {
-      await AuthenticationController.instance
+      final auth = AuthenticationController.instance;
+      await auth
           .loginUser(email.text.trim(), password.text);
+      auth.setInitialScreen(auth.firebaseUser.value);
     } catch (e) {
       toggleMessageBoxController
           .updateState(
