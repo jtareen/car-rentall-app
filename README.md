@@ -18,7 +18,7 @@ The project follows the **MVC (Model-View-Controller)** architecture to separate
 ## Installation Instructions
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/jtareen/car-rentall-app>
    ```
 2. Navigate to the project directory:
    ```bash
