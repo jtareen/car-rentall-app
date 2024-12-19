@@ -1,46 +1,91 @@
 import 'package:car_renr_app/models/car_class.dart';
-import 'package:car_renr_app/constants/styles.dart';
-import 'package:car_renr_app/widgets/home_screen_widgets/header.dart';
-import 'package:car_renr_app/widgets/home_screen_widgets/hero.dart';
-import 'package:car_renr_app/widgets/home_screen_widgets/main_car_card_widget.dart';
+import 'package:car_renr_app/views/main/car_details_screen.dart';
+import 'package:car_renr_app/views/main/chats_screen.dart';
+import 'package:car_renr_app/views/main/feed_screen.dart';
+import 'package:car_renr_app/views/main/profile/profile_screen.dart';
+import 'package:car_renr_app/views/main/trips_screen.dart';
+import 'package:car_renr_app/views/main/widgets/floating_action_button.dart';
 import 'package:flutter/material.dart';
 
-// Separate Scaffold for Home Screen
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _currentIndex = 0; // Track the selected tab
+
+  final List<Widget> _pages = [
+    FeedScreen(),
+    // CarDetailScreen(car: carList[0]),
+    TripsScreen(),
+    ChatsScreen(),
+    ProfileScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
+      ),
+      floatingActionButton: CustomFloatingActionButton(icon: Icons.add, onPressed: () {}),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        shadowColor: Colors.black,
+        padding: const EdgeInsets.all(0),
+        elevation: 30,
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const MainScreenHeader(),
-            const MainHeroWidget(),
-            Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30, top: 10,),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Top vehicles', style: TextStyle(color: primary, fontSize: 23, fontWeight: FontWeight.w600),),
-                  TextButton(onPressed: () {}, child: const Text('See all', style: TextStyle(color: Colors.grey, fontSize: 15, fontWeight: FontWeight.w400),))
-                ],
-              ),
+            _buildNavItem(
+              icon: _currentIndex == 0
+                  ? 'assets/icons/home_icon_filled.png'
+                  : 'assets/icons/home_icon.png',
+              onTap: () => _updateIndex(0),
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-              padding: const EdgeInsets.only(left: 30, top: 10, bottom: 30),
-                child: Row(
-                    children: carList.map((car) => MainCarCardWidget(car: car)).toList()
-                ),
-              ),
-            )
+            _buildNavItem(
+              icon: _currentIndex == 1
+                  ? 'assets/icons/car_icon_filled.png'
+                  : 'assets/icons/car_icon.png',
+              onTap: () => _updateIndex(1),
+            ),
+            const SizedBox(width: 40), // Space for FAB
+            _buildNavItem(
+              icon: _currentIndex == 2
+                  ? 'assets/icons/message_icon_filled.png'
+                  : 'assets/icons/message_icon.png',
+              onTap: () => _updateIndex(2),
+            ),
+            _buildNavItem(
+              icon: _currentIndex == 3
+                  ? 'assets/icons/profile_icon_filled.png'
+                  : 'assets/icons/profile_icon.png',
+              onTap: () => _updateIndex(3),
+            ),
           ],
         ),
-      )
+      ),
     );
+  }
+
+  Widget _buildNavItem({required String icon, required VoidCallback onTap}) {
+    return Expanded(child: IconButton(
+      icon: Image.asset(icon),
+      onPressed: onTap,
+    ));
+  }
+
+  void _updateIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 }

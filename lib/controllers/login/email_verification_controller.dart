@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:car_renr_app/controllers/authentication_controller.dart';
-import 'package:car_renr_app/controllers/countdown_timer_widget_controller.dart';
+import 'package:car_renr_app/controllers/authentication/authentication_controller.dart';
+import 'package:car_renr_app/controllers/widgets/countdown_timer_widget_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 

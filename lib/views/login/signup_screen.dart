@@ -1,17 +1,14 @@
-import 'package:car_renr_app/controllers/signup_screen_controller.dart';
+import 'package:car_renr_app/controllers/login/signup_screen_controller.dart';
 import 'package:car_renr_app/models/signin_textfield_model.dart';
+import 'package:car_renr_app/views/login/widgets/Login_divider.dart';
+import 'package:car_renr_app/views/login/widgets/scoial_buttons_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:car_renr_app/constants/styles.dart';
-import 'package:car_renr_app/constants/message_box_type.dart';
-import 'package:car_renr_app/widgets/error_dialog.dart';
 import 'package:car_renr_app/widgets/toggle_message_box.dart';
 import 'package:car_renr_app/widgets/async_button.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/Login_divider.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/password_field.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_textfield.dart';
+import 'package:car_renr_app/views/login/widgets/password_field.dart';
+import 'package:car_renr_app/views/login/widgets/signinup_page_textfield.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
@@ -23,7 +20,7 @@ class SignUpPage extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                Get.back();
               },
               icon: const Icon(Icons.arrow_back_ios_new, color: primary,)
           ),

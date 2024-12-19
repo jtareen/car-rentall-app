@@ -1,20 +1,16 @@
-import 'package:car_renr_app/controllers/signin_screen_controller.dart';
+import 'package:car_renr_app/controllers/login/signin_screen_controller.dart';
 import 'package:car_renr_app/models/signin_textfield_model.dart';
 import 'package:car_renr_app/views/login/forgot_password_screen.dart';
 import 'package:car_renr_app/views/login/signup_screen.dart';
+import 'package:car_renr_app/views/login/widgets/Login_divider.dart';
+import 'package:car_renr_app/views/login/widgets/scoial_buttons_widget.dart';
 import 'package:car_renr_app/widgets/async_button.dart';
 import 'package:car_renr_app/widgets/toggle_message_box.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:car_renr_app/constants/styles.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/scoial_buttons_widget.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/Login_divider.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/password_field.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/signinup_page_textfield.dart';
+import 'package:car_renr_app/views/login/widgets/password_field.dart';
+import 'package:car_renr_app/views/login/widgets/signinup_page_textfield.dart';
 import 'package:get/get.dart';
-
-import '../../constants/message_box_type.dart';
-import '../../widgets/error_dialog.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
@@ -76,7 +72,7 @@ class SignInPage extends StatelessWidget {
                       children: [
                         InkWell(
                             onTap: () {
-                              Get.to(() => const ForgotPasswordPage());
+                              Get.to(() => ForgotPasswordPage());
                             },
                             child: const Text('Forgot password?', style: TextStyle(color: Colors.grey),)
                         )

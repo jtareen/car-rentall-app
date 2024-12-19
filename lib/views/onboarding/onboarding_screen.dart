@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../constants/styles.dart';
 import '../../widgets/pagination_indicator.dart';
-import '../../controllers/on_boarding_controller.dart';
+import '../../controllers/onboarding/on_boarding_controller.dart';
 
 class OnboardingScreen extends StatelessWidget {
   OnboardingScreen({super.key});

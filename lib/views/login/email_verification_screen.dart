@@ -1,7 +1,7 @@
 import 'package:car_renr_app/constants/styles.dart';
-import 'package:car_renr_app/controllers/email_verification_controller.dart';
+import 'package:car_renr_app/controllers/login/email_verification_controller.dart';
 import 'package:car_renr_app/widgets/async_button.dart';
-import 'package:car_renr_app/widgets/login_register_widgets/countdown_timer.dart';
+import 'package:car_renr_app/views/login/widgets/countdown_timer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

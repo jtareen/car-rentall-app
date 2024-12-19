@@ -2,9 +2,11 @@
 
 import 'package:get/get.dart';
 
-import '../constants/message_box_type.dart';
+import '../../constants/message_box_type.dart';
 
 class ToggleMessageBoxController extends GetxController {
+  static ToggleMessageBoxController get instance => Get.find();
+
   var isVisible = false.obs;
   var message = ''.obs;
   var alertType = AlertType.success.obs;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../models/onboarding_model.dart';
-import '../views/login/signin_screen.dart';
-import '../widgets/onboarding_widgets/onboarding_page_widget.dart';
+import '../../models/onboarding_model.dart';
+import '../../views/login/signin_screen.dart';
+import '../../views/onboarding/widgets/onboarding_page_widget.dart';
 
 class OnboardingController extends GetxController{
 

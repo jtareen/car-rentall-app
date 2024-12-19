@@ -1,5 +1,5 @@
 import 'package:car_renr_app/constants/message_box_type.dart';
-import 'package:car_renr_app/controllers/toggle_message_box_controller.dart';
+import 'package:car_renr_app/controllers/widgets/toggle_message_box_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

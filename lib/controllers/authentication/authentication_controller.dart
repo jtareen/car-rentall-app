@@ -1,9 +1,12 @@
 import 'package:car_renr_app/exceptions/authentication_failure.dart';
 import 'package:car_renr_app/views/login/email_verification_screen.dart';
 import 'package:car_renr_app/views/login/signin_screen.dart';
-import 'package:car_renr_app/views/main/bottom_nav_bar.dart';
+import 'package:car_renr_app/views/main/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../views/onboarding/onboarding_screen.dart';
 
 class AuthenticationController extends GetxController {
   static AuthenticationController get instance => Get.find();
@@ -14,15 +17,35 @@ class AuthenticationController extends GetxController {
   @override void onReady() {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
-    setInitialScreen(firebaseUser.value);
-    // ever(firebaseUser, _setInitialScreen);
+    _setInitialScreen();
+  }
+
+  Future<void> _setInitialScreen() async {
+    final isFirstTime = await _isFirstTimeUser();
+
+    if (isFirstTime) {
+      Get.offAll(() => OnboardingScreen());
+    } else {
+      setInitialScreen(firebaseUser.value);
+    }
+  }
+
+  Future<bool> _isFirstTimeUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isFirstTime = prefs.getBool('isFirstTimeUser') ?? true;
+
+    if (isFirstTime) {
+      await prefs.setBool('isFirstTimeUser', false); // Mark as visited
+    }
+
+    return isFirstTime;
   }
 
   setInitialScreen(User? user) {
     user == null
         ? Get.offAll(() => SignInPage())
         : user.emailVerified
-            ? Get.offAll(() => const BottomNavBar())
+            ? Get.offAll(() => const MainScreen())
             : Get.to(() => EmailVerificationScreen());
   }
 
@@ -42,6 +65,7 @@ class AuthenticationController extends GetxController {
       throw ex.message;
     }
   }
+  /*  User Registration Function  */
 
   /*  Login User Function  */
   Future<void> loginUser(String email, String password) async {
@@ -55,6 +79,7 @@ class AuthenticationController extends GetxController {
       throw ex.message;
     }
   }
+  /*  Login User Function  */
 
   /*  Email Verification  */
   Future<void> sendVerificationEmail() async {
@@ -73,6 +98,21 @@ class AuthenticationController extends GetxController {
   }
   /*  Email Verification  */
 
+  /*  Password Reset Email  */
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      Get.snackbar("Success", "Verification email sent!");
+    } on FirebaseAuthException catch (e) {
+      final ex = AuthenticationFailure.code(e.code);
+      throw ex.message;
+    } catch (e) {
+      const ex = AuthenticationFailure();
+      throw ex.message;
+    }
+  }
+  /*  Password Reset Email  */
+
   /*  Sign Out Function  */
   Future<void> signOut() async {
     try {
@@ -82,4 +122,5 @@ class AuthenticationController extends GetxController {
       print('Error during sign out: ${e.toString()}');
     }
   }
+  /*  Sign Out Function  */
 }

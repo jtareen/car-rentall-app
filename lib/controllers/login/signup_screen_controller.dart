@@ -1,11 +1,11 @@
 
 
-import 'package:car_renr_app/controllers/authentication_controller.dart';
-import 'package:car_renr_app/controllers/toggle_message_box_controller.dart';
+import 'package:car_renr_app/controllers/authentication/authentication_controller.dart';
+import 'package:car_renr_app/controllers/widgets/toggle_message_box_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../constants/message_box_type.dart';
+import '../../constants/message_box_type.dart';
 
 class SignUpScreenController extends GetxController {
   static SignUpScreenController get instance => Get.find();
@@ -55,6 +55,7 @@ class SignUpScreenController extends GetxController {
     email.dispose();
     password.dispose();
     fullName.dispose();
+    toggleMessageBoxController.hideMessage();
     super.onClose();
   }
 }
