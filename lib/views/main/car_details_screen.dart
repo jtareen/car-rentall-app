@@ -9,6 +9,8 @@ import 'package:car_renr_app/views/main/widgets/host_detail_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/async_button.dart';
+
 class CarDetailScreen extends StatelessWidget {
   const CarDetailScreen({super.key, required this.car});
   
@@ -46,7 +48,7 @@ class CarDetailScreen extends StatelessWidget {
                       hostLocation: car.hostLocation,
                       hostRating: car.hostRating,
                     ),
-                    CarReviewList(reviewList: car.reviews, reviewCount: car.reviewCount,)
+                    CarReviewList(reviewList: car.reviews, reviewCount: car.reviewCount,),
                   ],
                 ),
               ),

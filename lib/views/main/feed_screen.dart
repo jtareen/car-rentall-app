@@ -1,5 +1,6 @@
 import 'package:car_renr_app/models/car_class.dart';
 import 'package:car_renr_app/constants/styles.dart';
+import 'package:car_renr_app/widgets/async_button.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/header.dart';
@@ -41,7 +42,7 @@ class FeedScreen extends StatelessWidget {
             )
           ],
         ),
-      )
+      ),
     );
   }
 }

@@ -18,8 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0; // Track the selected tab
 
   final List<Widget> _pages = [
-    FeedScreen(),
-    // CarDetailScreen(car: carList[0]),
+    const FeedScreen(),
     TripsScreen(),
     ChatsScreen(),
     ProfileScreen(),
