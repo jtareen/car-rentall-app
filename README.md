@@ -35,10 +35,7 @@ The project follows the **MVC (Model-View-Controller)** architecture to separate
 
 ## Screenshots and Video
 ### Screenshots
-Screenshots to be included.
-
-### Demo Video
-Video to be included.
+![Thumbnail](assets/screenshots/tumbnail.png)
 
 ## Author
 Developed by **[Jawad Ahmed Tareen]** as part of a semester project for the Mobile App Development course. For inquiries, you can reach out via [jtareen440@gmail.com].
